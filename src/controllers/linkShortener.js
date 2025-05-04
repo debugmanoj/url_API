@@ -1,76 +1,75 @@
 import rebrand from "../utils/Rebrandly.js"
 import userSchema from "../database/formSchema.js"
 
-const createLink=async(req,res)=>{
+const createLink = async (req, res) => {
     try {
-        
-        let sample=await userSchema.findOne({email:req.params.name})
-        let result = await rebrand.createLink(req.body.url);
-        if(result){
 
-        
-               sample.shortLinks.push({link:result.short_url,name:req.body.ShortenLinkName}); 
-               await sample.save();
-                // console.log( sample.shortLinks.push(result.short_url))
+        const sample = await userSchema.findOne({ _id: req?.params?.id })
+        const result = await rebrand.createLink(req?.body?.url);
+        if (result) {
+
+
+            sample.shortLinks.push({ link: result.short_url, name: req.body.ShortenLinkName });
+            await sample.save();
             res.status(200).send({
-              result:result
+                result: result
 
             })
         }
-        else{
+        else {
             res.status(500).send({
-                message:"Please provide correct Url ",
-                
+                message: "Please provide correct Url ",
+
             })
         }
 
         // sample.shortLinks.push()
     } catch (error) {
         res.status(500).send({
-            message:"internal server error",
-            link:"please enter proper Link",
-            error:error
+            message: "internal server error",
+            link: "please enter proper Link",
+            error: error
         })
     }
 
-    
-    
+
+
 }
 
-const getAllLink=async(req,res)=>{
+const getAllLink = async (req, res) => {
     try {
-        
-        let sample=await userSchema.findOne({email:req.params.name})
 
-        if(sample){
-               let datas=sample.shortLinks
-               console.log(datas)
-                // console.log( sample.shortLinks.push(result.short_url))
+        const sample = await userSchema.findOne({ _id: req?.params?.id })
+
+        if (sample) {
+            const datas = sample.shortLinks
+
+
             res.status(200).send({
-              result:datas
+                result: datas
 
             })
         }
-        else{
+        else {
             res.status(500).send({
-                message:"Wrong mail Id ",
-                
+                message: "Wrong mail Id ",
+
             })
         }
 
         // sample.shortLinks.push()
     } catch (error) {
         res.status(500).send({
-            message:"internal server error",
-            
-            error:error
+            message: "internal server error",
+
+            error: error
         })
     }
 
-    
-    
+
+
 }
-export default {createLink,getAllLink}
+export default { createLink, getAllLink }
 
 
 
